@@ -1,20 +1,31 @@
-import { FoodItem } from "../types/food";
+"use client";
+
 import { useState } from "react";
+import { FoodItem } from "@/types/food";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 interface FoodModalProps {
   food: FoodItem;
+  initialQuantity?: number;
   onClose: () => void;
   onAdd: (food: FoodItem, quantity: number) => void;
-  initialQuantity?: number;
 }
 
 export default function FoodModal({
   food,
+  initialQuantity,
   onClose,
   onAdd,
-  initialQuantity,
 }: FoodModalProps) {
-  const [quantity, setQuantity] = useState(initialQuantity ?? food.servingSize);
+  const [quantity, setQuantity] = useState(initialQuantity || food.servingSize);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,56 +33,69 @@ export default function FoodModal({
     onClose();
   };
 
+  const calculateNutrients = (amount: number) => {
+    const multiplier = amount / food.servingSize;
+    return {
+      calories: (food.calories * multiplier).toFixed(1),
+      protein: (food.protein * multiplier).toFixed(1),
+      carbs: (food.carbs * multiplier).toFixed(1),
+      fats: (food.fats * multiplier).toFixed(1),
+    };
+  };
+
+  const nutrients = calculateNutrients(quantity);
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg max-w-md w-full">
-        <h2 className="text-xl font-bold mb-4">
-          {initialQuantity ? `Edit ${food.name}` : food.name}
-        </h2>
-
-        <div className="mb-4 text-sm text-gray-600">
-          <p>
-            Per {food.servingSize}
-            {food.servingSizeUnit}:
-          </p>
-          <p>Calories: {food.calories} kcal</p>
-          <p>Protein: {food.protein}g</p>
-          <p>Carbs: {food.carbs}g</p>
-          <p>Fats: {food.fats}g</p>
-        </div>
-
+    <Dialog open onOpenChange={() => onClose()}>
+      <DialogContent className="bg-white dark:bg-gray-800">
+        <DialogHeader>
+          <DialogTitle>{food.name}</DialogTitle>
+        </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Amount ({food.servingSizeUnit}):
-            </label>
-            <input
+          <div className="space-y-2">
+            <Label htmlFor="quantity">Amount ({food.servingSizeUnit})</Label>
+            <Input
+              id="quantity"
               type="number"
-              min="0"
-              step="0.1"
               value={quantity}
               onChange={(e) => setQuantity(Number(e.target.value))}
-              className="mt-1 block w-full border rounded-md p-2"
             />
           </div>
 
-          <div className="flex justify-end space-x-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 border rounded-md hover:bg-gray-100"
-            >
+          <div className="bg-gray-50 p-4 rounded-lg flex">
+            <div className="flex flex-1 flex-col space-y-2">
+              <h3 className="font-semibold">
+                Per {food.servingSize}
+                {food.servingSizeUnit}:
+              </h3>
+              <p>Calories: {food.calories} kcal</p>
+              <p>Protein: {food.protein}g</p>
+              <p>Carbs: {food.carbs}g</p>
+              <p>Fats: {food.fats}g</p>
+            </div>
+
+            <div className="flex flex-1 flex-col space-y-2">
+              <h3 className="font-semibold">
+                Per {quantity}
+                {food.servingSizeUnit}
+              </h3>
+              <p>Calories: {nutrients.calories} kcal</p>
+              <p>Protein: {nutrients.protein}g</p>
+              <p>Carbs: {nutrients.carbs}g</p>
+              <p>Fats: {nutrients.fats}g</p>
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" type="button" onClick={onClose}>
               Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-            >
-              {initialQuantity ? "Save" : "Add to Cart"}
-            </button>
+            </Button>
+            <Button type="submit">
+              {initialQuantity ? "Update" : "Add to Cart"}
+            </Button>
           </div>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

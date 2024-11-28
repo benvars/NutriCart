@@ -1,4 +1,9 @@
-import { useState, useEffect } from "react";
+"use client";
+
+import { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface MacroGoals {
   calories: number;
@@ -73,76 +78,59 @@ export default function MacroGoals({ onGoalsChange }: MacroGoalsProps) {
   };
 
   return (
-    <div className="border rounded-lg p-6">
-      <h2 className="text-2xl font-bold mb-4">Macro Goals</h2>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Daily Calories
-            </label>
-            <input
+    <Card>
+      <CardHeader>
+        <CardTitle>Set Your Macro Goals</CardTitle>
+      </CardHeader>
+      <CardContent className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-4 p-4">
+          <div className="space-y-1">
+            <Label htmlFor="calories">Calories (kcal)</Label>
+            <Input
+              id="calories"
               type="number"
-              min="0"
-              value={goals.calories}
+              value={goals.calories || ""}
               onChange={(e) =>
                 handleInputChange("calories", Number(e.target.value))
               }
-              className="w-full border rounded-md p-2"
             />
           </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Protein (%)
-            </label>
-            <input
+          <div className="space-y-1">
+            <Label htmlFor="protein">Protein (%)</Label>
+            <Input
+              id="protein"
               type="number"
-              min="0"
-              max="100"
-              value={goals.proteinPercentage}
+              value={goals.proteinPercentage || ""}
               onChange={(e) =>
                 handleInputChange("proteinPercentage", Number(e.target.value))
               }
-              className="w-full border rounded-md p-2"
             />
           </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Carbs (%)
-            </label>
-            <input
+          <div className="space-y-1">
+            <Label htmlFor="carbs">Carbs (%)</Label>
+            <Input
+              id="carbs"
               type="number"
-              min="0"
-              max="100"
-              value={goals.carbsPercentage}
+              value={goals.carbsPercentage || ""}
               onChange={(e) =>
                 handleInputChange("carbsPercentage", Number(e.target.value))
               }
-              className="w-full border rounded-md p-2"
             />
           </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Fats (%)
-            </label>
-            <input
+          <div className="space-y-1">
+            <Label htmlFor="fats">Fats (%)</Label>
+            <Input
+              id="fats"
               type="number"
-              min="0"
-              max="100"
-              value={goals.fatsPercentage}
+              value={goals.fatsPercentage || ""}
               onChange={(e) =>
                 handleInputChange("fatsPercentage", Number(e.target.value))
               }
-              className="w-full border rounded-md p-2"
             />
           </div>
         </div>
 
-        <div className="bg-gray-50 p-4 rounded-lg">
+        <div className="flex flex-col bg-gray-50 p-4 rounded-lg">
           <h3 className="font-semibold mb-3">Daily Targets</h3>
           <div className="space-y-2">
             <p>
@@ -155,12 +143,12 @@ export default function MacroGoals({ onGoalsChange }: MacroGoalsProps) {
             <p>
               Fats: {gramsGoals.fats}g ({goals.fatsPercentage}% of calories)
             </p>
-            <p className="mt-4 text-sm text-gray-600">
+            <p className="text-sm text-gray-600">
               Total: {goals.calories} calories
             </p>
           </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

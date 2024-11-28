@@ -125,9 +125,7 @@ export default function Home() {
                   <div>
                     <h3 className="font-semibold">{food.name}</h3>
                     <p className="text-sm text-gray-600">
-                      Per {food.servingSize}
-                      {food.servingSizeUnit} | {food.calories} kcal | P:{" "}
-                      {food.protein}g | C: {food.carbs}g | F: {food.fats}g
+                      {`Per ${food.servingSize} ${food.servingSizeUnit}: | ${food.calories} kcal | P: ${food.protein}g | C: ${food.carbs}g | F: ${food.fats}g`}
                     </p>
                   </div>
                   <button
@@ -243,7 +241,12 @@ export default function Home() {
       {removeItem && (
         <ConfirmationModal
           title="Remove Food"
-          message={`Are you sure you want to remove ${removeItem.item.name} from your cart?`}
+          message={
+            <>
+              Are you sure you want to remove{" "}
+              <strong>{removeItem.item.name}</strong> from your cart?
+            </>
+          }
           onConfirm={() => {
             removeCartItem(removeItem.index);
             setRemoveItem(null);
