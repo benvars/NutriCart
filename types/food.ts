@@ -10,3 +10,14 @@ export interface FoodItem {
   carbs: number;
   fats: number;
 }
+
+export interface CartItem extends FoodItem {
+  quantity: number;
+}
+
+export interface MacroGoals {
+  protein: number;
+  carbs: number;
+  fats: number;
+  calories: number;
+}
