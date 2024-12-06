@@ -178,7 +178,7 @@ export default function MacroGoals({ onGoalsChange }: MacroGoalsProps) {
                 )}
               </div>
 
-              <div className="flex flex-col bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
+              <div className="flex flex-col bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
                 <h3 className="font-semibold mb-3">Daily Targets</h3>
                 <div className="space-y-2">
                   <p>

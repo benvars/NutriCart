@@ -1,3 +1,6 @@
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { CartItem, MacroGoals } from "../types/food";
 
 interface CartProps {
@@ -32,67 +35,91 @@ export default function Cart({
   };
 
   return (
-    <div className="border rounded-lg p-4 flex flex-col flex-1">
-      <h2 className="text-2xl font-bold mb-4 flex-none">Your Cart</h2>
-      <div className="space-y-2 overflow-y-auto flex-1">
-        {cartItems.map((item, index) => (
-          <div key={index} className="p-2 border rounded relative group">
-            <div className="absolute top-2 right-2">
-              <div className="relative">
-                <button
-                  className="p-1 hover:bg-gray-100 rounded"
-                  onClick={() => onEditItem(item, index)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="p-1 hover:bg-gray-100 rounded ml-2 text-red-500"
-                  onClick={() => onRemoveItem(item, index)}
-                >
-                  Remove
-                </button>
-              </div>
+    <Card className="flex flex-col flex-1 h-full">
+      <CardHeader>
+        <CardTitle>Your Cart</CardTitle>
+      </CardHeader>
+      <CardContent className="flex flex-col h-[calc(100%-72px)]">
+        <ScrollArea className="">
+          <div className="space-y-2">
+            {cartItems.map((item, index) => (
+              <Card key={index} className="relative group">
+                <CardContent className="p-4">
+                  <div className="absolute top-2 right-2">
+                    <div className="relative space-x-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => onEditItem(item, index)}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                        onClick={() => onRemoveItem(item, index)}
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  </div>
+                  <h3 className="font-semibold">{item.name}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Amount: {item.quantity}
+                    {item.servingSizeUnit}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {(
+                      (item.calories * item.quantity) /
+                      item.servingSize
+                    ).toFixed(1)}{" "}
+                    kcal | P:{" "}
+                    {(
+                      (item.protein * item.quantity) /
+                      item.servingSize
+                    ).toFixed(1)}
+                    g | C:{" "}
+                    {((item.carbs * item.quantity) / item.servingSize).toFixed(
+                      1
+                    )}
+                    g | F:{" "}
+                    {((item.fats * item.quantity) / item.servingSize).toFixed(
+                      1
+                    )}
+                    g
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </ScrollArea>
+
+        <div className="border-t pt-4 mt-4 h-fit">
+          <h3 className="font-bold text-lg mb-2">Totals</h3>
+          <div className="grid grid-cols-2 gap-x-4">
+            <div>
+              <p>Current:</p>
+              <p>Calories: {totals.calories.toFixed(1)} kcal</p>
+              <p>Protein: {totals.protein.toFixed(1)}g</p>
+              <p>Carbs: {totals.carbs.toFixed(1)}g</p>
+              <p>Fats: {totals.fats.toFixed(1)}g</p>
             </div>
-            <h3 className="font-semibold">{item.name}</h3>
-            <p className="text-sm text-gray-600">
-              Amount: {item.quantity}
-              {item.servingSizeUnit}
-            </p>
-            <p className="text-sm text-gray-600">
-              {((item.calories * item.quantity) / item.servingSize).toFixed(1)}{" "}
-              kcal | P:{" "}
-              {((item.protein * item.quantity) / item.servingSize).toFixed(1)}g
-              | C:{" "}
-              {((item.carbs * item.quantity) / item.servingSize).toFixed(1)}g |
-              F: {((item.fats * item.quantity) / item.servingSize).toFixed(1)}g
-            </p>
-          </div>
-        ))}
-      </div>
-      <div className="border-t pt-4 flex-none">
-        <h3 className="font-bold text-lg mb-2">Totals</h3>
-        <div className="grid grid-cols-2 gap-x-4">
-          <div>
-            <p>Current:</p>
-            <p>Calories: {totals.calories.toFixed(1)} kcal</p>
-            <p>Protein: {totals.protein.toFixed(1)}g</p>
-            <p>Carbs: {totals.carbs.toFixed(1)}g</p>
-            <p>Fats: {totals.fats.toFixed(1)}g</p>
-          </div>
-          <div>
-            <p>Remaining:</p>
-            <p>
-              Calories: {getDifference(totals.calories, macroGoals.calories)}{" "}
-              kcal
-            </p>
-            <p>
-              Protein: {getDifference(totals.protein, macroGoals.protein)} g
-            </p>
-            <p>Carbs: {getDifference(totals.carbs, macroGoals.carbs)} g</p>
-            <p>Fats: {getDifference(totals.fats, macroGoals.fats)} g</p>
+            <div>
+              <p>Remaining:</p>
+              <p>
+                Calories: {getDifference(totals.calories, macroGoals.calories)}{" "}
+                kcal
+              </p>
+              <p>
+                Protein: {getDifference(totals.protein, macroGoals.protein)} g
+              </p>
+              <p>Carbs: {getDifference(totals.carbs, macroGoals.carbs)} g</p>
+              <p>Fats: {getDifference(totals.fats, macroGoals.fats)} g</p>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

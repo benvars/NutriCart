@@ -35,9 +35,9 @@ export default function FoodDatabase({
         <ScrollArea className="h-[calc(100%-120px)]">
           <div className="space-y-2">
             {filteredFoods.map((food) => (
-              <div
+              <Card
                 key={food.id}
-                className="flex justify-between items-center p-4 border rounded hover:bg-gray-50 dark:hover:bg-gray-800"
+                className="flex justify-between items-center p-4 border rounded hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <div>
                   <h3 className="font-semibold">{food.name}</h3>
@@ -53,7 +53,7 @@ export default function FoodDatabase({
                 >
                   Add
                 </Button>
-              </div>
+              </Card>
             ))}
           </div>
         </ScrollArea>

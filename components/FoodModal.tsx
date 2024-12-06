@@ -62,7 +62,7 @@ export default function FoodModal({
             />
           </div>
 
-          <div className="bg-gray-50 p-4 rounded-lg flex">
+          <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg flex">
             <div className="flex flex-1 flex-col space-y-2">
               <h3 className="font-semibold">
                 Per {food.servingSize}
